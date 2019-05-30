@@ -27,8 +27,9 @@ var storage = multer.diskStorage({
 })
 
 var upload = multer({ storage: storage })
+
 var upload2 =  multer({
-  dest: '.uploads/',
+  dest: './uploads',
   rename: function(fieldname, filename) {
       return filename;
   },
@@ -51,7 +52,7 @@ mongoose
 
 const Item = require('./models/Image');
 
-app.post('/post_img', upload2.single('photo'),function(req, res) {
+app.post('/post_img', upload2.any('photo'),function(req, res) {
   console.log(req.files);
   res.send("File uploaded.");
 });

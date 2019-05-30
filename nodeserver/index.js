@@ -67,7 +67,7 @@ app.post('/image/add', upload.single('picture'), (req, res) => {
     var data = {
       image:{
         file: __dirname + '/' + req.file.path,
-        content_type: "image/*"
+        content_type: "image/jpg"
       }
     }
 
