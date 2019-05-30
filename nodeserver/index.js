@@ -73,10 +73,18 @@ app.post('/image/add', upload.single('picture'), (req, res) => {
 
     console.log("Quase")
     
-    needle.post('127.0.0.1:3001/post_img', data, {
+    needle.post('172.30.19.145:9090/classify/api/', data, {
       multipart: true
     }, function(err, result) {
       console.log("result", result.body);
+      needle.post('', result.body, {json:true},function(err, result) {
+        if (!err) {
+          console.log("Response sent!") ;
+        }
+        if (err) {
+          console.log('neddle error');
+        }
+      })
     })
 
     newImage.save().then((result) =>{
