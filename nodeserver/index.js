@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const needle = require('needle');
 const request = require('request');
 const fs = require('fs');
 const port = 3000;
@@ -62,14 +63,28 @@ app.post('/image/add', upload.single('picture'), (req, res) => {
       imageName: req.body.imageName,
       imageData: __dirname + '/' + req.file.path
     })
+  
+    var data = {
+      image:{
+        file: __dirname + '/' + req.file.path,
+        content_type: "image/*"
+      }
+    }
 
     console.log("Quase")
     
-    newImage.save().then((result) => {
-      request.post(url:'http://127.0.0.1:3001/upload',req)
-    });
+    needle.post('127.0.0.1:3001/post_img', data, {
+      multipart: true
+    }, function(err, result) {
+      console.log("result", result.body);
+    })
+
+    newImage.save().then((result) =>{
+      res.redirect('/')
+    })
 });
+
 
 app.listen(port, function () {
   console.log('Example app listening on port '+ port +'!');
-});
+})

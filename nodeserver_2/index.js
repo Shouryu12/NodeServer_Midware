@@ -27,6 +27,18 @@ var storage = multer.diskStorage({
 })
 
 var upload = multer({ storage: storage })
+var upload2 =  multer({
+  dest: '.uploads/',
+  rename: function(fieldname, filename) {
+      return filename;
+  },
+  onFileUploadStart: function(file) {
+      console.log(file.originalname + ' is starting ...')
+  },
+  onFileUploadComplete: function(file) {
+      console.log(file.fieldname + ' uploaded to  ' + file.path)
+  }
+})
 
 //Connect to MongoDB
 mongoose
@@ -39,8 +51,11 @@ mongoose
 
 const Item = require('./models/Image');
 
+app.post('/post_img', upload2.single('photo'),function(req, res) {
+  console.log(req.files);
+  res.send("File uploaded.");
+});
 
-app.post('/upload', upload.single('photo'))
 app.listen(port, function () {
   console.log('Example app listening on port '+ port +'!');
 });
